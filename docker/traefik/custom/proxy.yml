@@ -1,0 +1,18 @@
+http:
+  routers:
+    univ:
+      rule: "Host(`example.com`)"
+      entryPoints:
+        - websecure
+      service: univ-service
+      tls:
+        certResolver: letsencrypt
+      middlewares:
+        - compress@file
+        - security-headers@file
+
+  services:
+    univ-service:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8000"

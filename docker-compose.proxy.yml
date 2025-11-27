@@ -1,0 +1,15 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--configFile=/etc/traefik/traefik.yml"
+    # network host → tidak perlu lagi mapping ports
+    network_mode: host
+    volumes:
+      - ./docker/traefik/traefik.yml:/etc/traefik/traefik.yml:z
+      - ./docker/traefik/custom:/etc/traefik/custom:z
+      - ./docker/traefik/letsencrypt:/letsencrypt:z
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true

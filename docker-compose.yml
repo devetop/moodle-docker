@@ -1,0 +1,29 @@
+services:
+  moodle:
+    image: app-moodle-${APP_NAME}
+    container_name: moodle-${APP_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8000:80"
+    depends_on:
+      - db
+    volumes:
+      - ./moodle:/var/www/html:z
+      - ./moodle_data:/var/www/moodledata:z
+  db:
+    image: mariadb:11
+    container_name: db-moodle-${APP_NAME}
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      TZ: ${TZ}
+    volumes:
+      - ./docker/mysql/datadir:/var/lib/mysql:z
+      - ./docker/mysql/config/my.cnf:/etc/my.cnf:z

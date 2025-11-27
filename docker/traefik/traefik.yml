@@ -1,0 +1,46 @@
+# traefik.yml
+api:
+  dashboard: true
+
+providers:
+  file:
+    directory: "/etc/traefik/custom"
+    watch: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: your-email@yourdomain.com
+      storage: /letsencrypt/acme.json
+      tlsChallenge: true
+  cloudflare:
+    acme:
+      # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"  # TESTING ONLY
+      email: your-email@yourdomain.com
+      storage: /letsencrypt/acme.json  # Simpan di volume persisten
+      keyType: EC_P256               # Gunakan ECC untuk performa & keamanan
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+        delayBeforeCheck: 30
+
+log:
+  level: debug  # for error level logging
+  filepath: "/logs/error.log"
+
+accesslog:
+  filepath: "/logs/access.log"

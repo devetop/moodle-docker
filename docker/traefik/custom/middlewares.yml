@@ -1,0 +1,26 @@
+http:
+  middlewares:
+    security-headers:
+      headers:
+        sslRedirect: true
+        stsSeconds: 31536000
+        browserXssFilter: true
+        contentTypeNosniff: true
+        frameDeny: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+
+    compress:
+      compress:
+        excludedContentTypes:
+          - "text/event-stream"
+          - "application/octet-stream"
+          - "image/jpeg"
+          - "image/png"
+          - "image/gif"
+          - "application/pdf"
+        minResponseBodyBytes: 1024
+        encodings:
+          - "br"
+          - "gzip"
+
