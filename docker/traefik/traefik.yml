@@ -1,4 +1,5 @@
 # traefik.yml
+
 api:
   dashboard: true
 
@@ -33,10 +34,13 @@ certificatesResolvers:
       keyType: EC_P256               # Gunakan ECC untuk performa & keamanan
       dnsChallenge:
         provider: cloudflare
+        propagation:
+          delayBeforeChecks: 60
+          disableChecks: true
+          requireAllRNS: true
         resolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
-        delayBeforeCheck: 30
 
 log:
   level: debug  # for error level logging

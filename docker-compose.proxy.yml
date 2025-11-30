@@ -2,9 +2,11 @@ services:
   traefik:
     image: traefik:latest
     container_name: traefik
+    environment:
+      - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}
     command:
       - "--configFile=/etc/traefik/traefik.yml"
-    # network host → tidak perlu lagi mapping ports
     network_mode: host
     volumes:
       - ./docker/traefik/traefik.yml:/etc/traefik/traefik.yml:z

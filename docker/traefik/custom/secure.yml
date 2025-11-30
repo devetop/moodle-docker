@@ -1,0 +1,7 @@
+# htpasswd -nb admin secure_password | sed -e s/\\$/\\$\\$/g
+http:
+  middlewares:
+    simpleAuth:
+      basicAuth:
+        users:
+          - "admin:$apr1$cRfV6p8e$V1V/Z8a8t5R5V5b5p5K5Z."
