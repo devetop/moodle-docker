@@ -2,6 +2,7 @@ services:
   moodle:
     image: app-moodle-${APP_NAME}
     container_name: moodle-${APP_NAME}
+    userns_mode: keep-id
     build:
       context: .
       dockerfile: Dockerfile
