@@ -9,12 +9,18 @@ services:
     env_file:
       - .env
     ports:
-      - "127.0.0.1:8000:80"
+      - "127.0.0.1:8000:8000"
     depends_on:
       - db
     volumes:
       - ./moodle:/var/www/html:z
       - ./moodle_data:/var/www/moodledata:z
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8000/health.php"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
   db:
     image: mariadb:11
     container_name: db-moodle-${APP_NAME}
@@ -28,3 +34,9 @@ services:
     volumes:
       - ./docker/mysql/datadir:/var/lib/mysql:z
       - ./docker/mysql/config/my.cnf:/etc/my.cnf:z
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
