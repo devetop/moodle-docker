@@ -1,5 +1,7 @@
 FROM webdevops/php-nginx:8.2-alpine
 
+WORKDIR /var/www/html
+
 # Sesuaikan UID dan GID dengan user yang digunakaan untuk menjalankan container.
 ARG UID=1000
 ARG GID=1000
@@ -33,6 +35,8 @@ COPY ./docker/nginx/vhost.conf /opt/docker/etc/nginx/vhost.conf
 COPY ./docker/nginx/nginx.conf /opt/docker/etc/nginx/nginx.conf
 COPY ./docker/nginx/conf.d /etc/nginx/conf.d
 COPY ./docker/syslog-ng/syslog-ng.conf /opt/docker/etc/syslog-ng/syslog-ng.conf
+
+COPY --chown=application:application ./health /var/www/health
 
 RUN ln -sf /var/run/syslog-ng.sock /dev/log
 RUN chown -R application:application /opt/docker/etc /var/lib/nginx /var/run /run /var/lib/syslog-ng
