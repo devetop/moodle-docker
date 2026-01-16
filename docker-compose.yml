@@ -1,6 +1,7 @@
 services:
   moodle:
     image: app-moodle-${APP_NAME}
+    restart: unless-stopped
     userns_mode: keep-id
     build:
       context: .
@@ -8,8 +9,6 @@ services:
     deploy:
       mode: replicated
       replicas: ${MOODLE_REPLICAS:-1}
-      restart_policy:
-        condition: on-failure
       resources:
         limits:
           cpus: '1.50'
@@ -31,11 +30,10 @@ services:
       start_period: 10s
   db:
     image: mariadb:11
+    restart: unless-stopped
     deploy:
       mode: replicated
       replicas: ${DB_REPLICAS:-1}
-      restart_policy:
-        condition: on-failure
       resources:
         limits:
           cpus: '1.50'
